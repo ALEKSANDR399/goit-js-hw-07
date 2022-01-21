@@ -3,9 +3,10 @@ import { galleryItems } from './gallery-items.js';
 
 const galleryBoxForCardImage = document.querySelector('.gallery');
 const cardCollection = addCardWithImg(galleryItems);
+let instance;
 
 galleryBoxForCardImage.addEventListener('click', addOpenOriginalSizeImage)
-galleryBoxForCardImage.addEventListener('keydown', closeModalWindow);
+
 galleryBoxForCardImage.innerHTML = cardCollection;
 
 function addCardWithImg (cards) { 
@@ -25,22 +26,30 @@ function addOpenOriginalSizeImage(event) {
   event.preventDefault()
   if (!event.target.classList.contains("gallery__image")) return;
 
-	basicLightbox.create(`
+  instance = basicLightbox.create(`
 		<img width="1280" height="854" src= '${event.target.dataset.source}'>
-	`).show()
+	`);
+  instance.show();
   
 };
 
-console.log(basicLightbox);
-function closeModalWindow(event) {
-  
-  if (basicLightbox) { 
-    if (event.key === "Escape") {
-      basicLightbox.remove();
-    };
+
+
+galleryBoxForCardImage.addEventListener('keydown', (e) => {
+ 
+  if (e.code === "Escape") { 
+    instance.close();
   };
+
+});
+
+galleryBoxForCardImage.removeEventListener('keydown', instance);
+
+
+  
+
     
-};
+
 
 
 
